@@ -474,33 +474,42 @@ Now we can decrypt ELF file by breaking before `srand` in gdb and changing seed 
 
 
 ![](./imgs/execwrapper.png)
+
 ![](./imgs/breakpoints.png)
 
 Setting seed:
 ![](./imgs/setseed.png)
 
 Break after decrypted ELF was written to an in-memory file.
+
 ![](./imgs/breakwrite.png)
 
 Extracting decrypted ELF:
+
 ![](./imgs/extract_elf.png)
 
 
 Extracted [binary](./solution/stage2.elf) prints the flag character by character very slowly.
+
 ![](./imgs/slow.png)
 
 Let's open it in IDA. It is a statically linked stripped binary so there are no function names. We saw that the binary before printing the flag prints *"Right time has come! Take your flag!"*. Let's look for that string in "Strings window" in IDA (Shift+F12).
+
 ![](./imgs/ida_strings.png)
+
 ![](./imgs/xref.png)
 
 Using XREFs we find `sub_40185D` and `sub_40178A`:
+
 ![](./imgs/sub_40185D.png)
+
 ![](./imgs/sub_40178A.png)
 
 If you look inside `sub_443B50`, you will see that this is a GLIBC wrapper for the wrtie syscall.
 
 
 Let's look inside `sub_4016DD`:
+
 ![](./imgs/sub_4016DD.png)
 
 It takes a character *a1* and its index *a2* as arguments and then executes for-cycle until `i>v4*v5`.
@@ -508,6 +517,7 @@ It takes a character *a1* and its index *a2* as arguments and then executes for-
 In each iteration function `sub_4016A5` is called on a cahracter(a1) 65535 times.
 
 `sub_4016A5` just xors a passed character with 1024 bytes.
+
 ![](./imgs/sub_4016A5.png)
 
 So `sub_4016DD` loops until `i>v4*v5` and each iteration function `sub_4016A5`, which xors a character with 1024 bytes, is called 65535 times.
@@ -515,17 +525,23 @@ So `sub_4016DD` loops until `i>v4*v5` and each iteration function `sub_4016A5`, 
 Let's just patch for-loop in which `sub_4016A5` is called so it would be called only once each iteration.
 
 Unpatched opcode:
+
 ![](./imgs/p1.png)
+
 ![](./imgs/p1h.png)
 
 
 Patched:
+
 ![](./imgs/p2hex.png)
+
 ![](./imgs/p2.png)
+
 ![](./imgs/p2patch.png)
 
 
 Now the binary will print the flag:
+
 ![](./imgs/flag.png)
 
 Flag: `VolgaCTF{m4n_y0u_c4n_d3f1n1t3ly_see_th3_fu7ur3}`
