@@ -20,6 +20,7 @@ Changing the dynamic loader with [patchelf](https://github.com/NixOS/patchelf):
 patchelf --set-interpreter ./ld-linux-x86-64.so.2 ./future
 ```
 Now the binary can be run with `LD_PRELOAD=./libc.so.6 ./future`:
+
 ![](./imgs/firstrun.png)
 
 Let's open it in IDA Pro. You can download my [.i64 file](./solution/future.i64) and put it next to the binary to view the Hex-Rays output in IDA. 
