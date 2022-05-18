@@ -278,7 +278,8 @@ Not much help though. When competition ended, people in the Telegram chat told t
 The task description hints that you need to brute the seed: *"We suspect this is a virus that will be executed in the future"*
 
 The following [straightforward single-threaded bruteforce implementation](./solution/brute.c) finds the correct seed in 46 minutes.
-![](/imgs/seedbrute.png)
+
+![](./imgs/seedbrute.png)
 ```C
 #include <stdio.h>
 #include <stdlib.h>
