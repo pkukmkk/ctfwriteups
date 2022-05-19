@@ -279,11 +279,11 @@ The task description hints that you need to brute the seed: *"We suspect this is
 
  The following [straightforward single-threaded bruteforce implementation](./solution/brute.c) finds the correct seed in 46 minutes.
 
-![](/imgs/seedbrute.png)
+![](./imgs/seedbrute.png)
 
 `encryptedBytes` is an encrypted ELF file so first four encrypted bytes `15 88 8C 0E` are actually an encrypted ELF file signature(magic) which is always equal to `7F 45 4C 46`. Thus, by decrypting first four bytes of `encryptedBytes` and comparing decrypted bytes with an ELF signature we can find the correct seed.
 
-![](/imgs/encrypted.png)
+![](./imgs/encrypted.png)
 
 
 
