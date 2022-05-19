@@ -274,10 +274,18 @@ unsigned __int64 __fastcall decryptElf(char *encryptedBytes, size_t ELF_SIZE, ch
 Not much help though. When competition ended, people in the Telegram chat told that this is actually the [RC4 stream cipher](https://en.wikipedia.org/wiki/RC4).
 
 
-The task description hints that you need to brute the seed: *"We suspect this is a virus that will be executed in the future"*
+The task description hints that you need to brute the seed: *"We suspect this is a virus that will be executed in the future"*.
 
-The following [straightforward single-threaded bruteforce implementation](./solution/brute.c) finds the correct seed in 46 minutes.
+ The following [straightforward single-threaded bruteforce implementation](./solution/brute.c) finds the correct seed in 46 minutes.
+
 ![](/imgs/seedbrute.png)
+
+`encryptedBytes` is an encrypted ELF file so first four encrypted bytes `15 88 8C 0E` are actually an encrypted ELF file signature(magic) which is always equal to `7F 45 4C 46`. Thus, by decrypting first four bytes of `encryptedBytes` and comparing decrypted bytes with an ELF signature we can find the correct seed.
+
+![](/imgs/encrypted.png)
+
+
+
 ```C
 #include <stdio.h>
 #include <stdlib.h>
